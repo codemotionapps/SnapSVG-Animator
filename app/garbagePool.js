@@ -1,4 +1,3 @@
-
 var GarbagePool = function () {
     this.EMPTY_POOL = [];      //if empty remove
     this.REF_POOL = [];        //if no reference remove
@@ -80,3 +79,6 @@ GarbagePool.prototype.purgeRefPool = function () {
 };
 
 var GP = new GarbagePool();
+
+export { GarbagePool };
+export default GP;

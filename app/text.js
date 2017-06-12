@@ -5,7 +5,6 @@ var Text = function (parentMC,resourceManager,charId,ObjectId,placeAfter,transfo
 
     this.create = function () {
         var j,
-            k,
             transformArray,
             transformMat;
 
@@ -28,11 +27,11 @@ var Text = function (parentMC,resourceManager,charId,ObjectId,placeAfter,transfo
         }
 
         transformArray = transform.split(",");
-        transformMat = new Snap.Matrix(transformArray[0],transformArray[1],transformArray[2],transformArray[3],transformArray[4],transformArray[5]);
+        transformMat = new window.Snap.Matrix(transformArray[0],transformArray[1],transformArray[2],transformArray[3],transformArray[4],transformArray[5]);
         instance.el.transform(transformMat);
 
         if (placeAfter && parseInt(placeAfter) !== 0) {
-            afterMC = parentMC.getChildById(parseInt(placeAfter));
+            const afterMC = parentMC.getChildById(parseInt(placeAfter));
 
             if (afterMC.isMasked) {  //if masked add outside mask group
                 afterMC.el.parent().before(instance.el);
@@ -48,7 +47,6 @@ var Text = function (parentMC,resourceManager,charId,ObjectId,placeAfter,transfo
     this.addText = function (data) {
 
         var text,
-            bbox,
             textBox,
             textX,
             textY,
@@ -58,7 +56,6 @@ var Text = function (parentMC,resourceManager,charId,ObjectId,placeAfter,transfo
             fontColor,
             textAlign,
             textAnchor,
-            textIndent,
             textBaseline,
             textBounds,
             textStyles;
@@ -77,7 +74,7 @@ var Text = function (parentMC,resourceManager,charId,ObjectId,placeAfter,transfo
         fontSize = data.paras[0].textRun[0].style.fontSize;
         fontName = data.paras[0].textRun[0].style.fontName;
         fontColor = data.paras[0].textRun[0].style.fontColor;
-        letterSpacing = data.paras[0].textRun[0].style.letterSpacing;
+        const letterSpacing = data.paras[0].textRun[0].style.letterSpacing;
 
         if (textAlign == 'left') {
             textAnchor = 'start';
@@ -98,7 +95,7 @@ var Text = function (parentMC,resourceManager,charId,ObjectId,placeAfter,transfo
 
         //rect
         if (data.behaviour.isBorderDrawn !== "false") {
-            textRect = textBox.rect(textBounds[0], textBounds[1], textBounds[2], textBounds[3]);
+            const textRect = textBox.rect(textBounds[0], textBounds[1], textBounds[2], textBounds[3]);
             textRect.attr({
                 stroke: 'black',
                 fill: 'transparent'
@@ -127,8 +124,7 @@ var Text = function (parentMC,resourceManager,charId,ObjectId,placeAfter,transfo
 
     this.multiLine = function (textBox, data, textBounds, textStyles) {
         
-        var string = data.txt,
-            spans = [],
+        var spans = [],
             chars = '',
             substr,
             tempTxt,
@@ -145,8 +141,9 @@ var Text = function (parentMC,resourceManager,charId,ObjectId,placeAfter,transfo
 
             bbox = tempTxt.getBBox();
 
+            const newIndex = chars.lastIndexOf(' ');
+
             if (bbox.w > boundsWidth) {
-                newIndex = chars.lastIndexOf(' ');
                 substr = chars.slice(0, newIndex);
                 spans.push(substr);
                 i = i - (chars.length - substr.length) + 2;
@@ -164,7 +161,7 @@ var Text = function (parentMC,resourceManager,charId,ObjectId,placeAfter,transfo
             tempTxt.remove();
         }
 
-        text = textBox.text(0, 0, spans);
+        const text = textBox.text(0, 0, spans);
         sp = text.selectAll('tspan');
         sp.attr({
             'x': 0,
@@ -177,3 +174,4 @@ var Text = function (parentMC,resourceManager,charId,ObjectId,placeAfter,transfo
     this.create();
 };
 
+export default Text;

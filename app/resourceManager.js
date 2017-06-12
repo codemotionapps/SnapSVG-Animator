@@ -1,4 +1,3 @@
-
 var ResourceManager = function (data) {
     var id;
 
@@ -40,7 +39,7 @@ var ResourceManager = function (data) {
         }
     }
 
-    console.log(this.m_data.DOMDocument);
+    // console.log(this.m_data.DOMDocument);
 };
 
 //Member functions
@@ -59,3 +58,5 @@ ResourceManager.prototype.getBitmap = function(id) {
 ResourceManager.prototype.getText = function(id) {
     return this.m_text[id];
 };
+
+export default ResourceManager;

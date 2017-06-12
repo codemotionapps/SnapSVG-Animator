@@ -1,8 +1,9 @@
+import GP from "./garbagePool";
+import CMD from "./commands";
 
 var MovieClip = function (commandTimeline, s, resourceManager, objectID, name, transform) {
-    var i,
-        transformData,
-        transformArray;
+    var transformData,
+        transformArray,
         parentEl = s.type == 'svg' ? s : s.el;  //parent is stage if svg
 
     if (objectID) {
@@ -33,7 +34,7 @@ var MovieClip = function (commandTimeline, s, resourceManager, objectID, name, t
     this.playing = true;
     this.resourceManager = resourceManager;
     this.commandList = [];
-    this.matrix = new Snap.Matrix();
+    this.matrix = new window.Snap.Matrix();
 
     if (typeof(this.m_timeline.Label) !== 'undefined') {
       this._labels = this.m_timeline.Label;
@@ -43,24 +44,9 @@ var MovieClip = function (commandTimeline, s, resourceManager, objectID, name, t
     {
         transformData = this.transform;
         transformArray = transformData.split(",");
-        this.matrix = new Snap.Matrix(transformArray[0],transformArray[1],transformArray[2],transformArray[3],transformArray[4],transformArray[5]);
+        this.matrix = new window.Snap.Matrix(transformArray[0],transformArray[1],transformArray[2],transformArray[3],transformArray[4],transformArray[5]);
         this.el.transform(this.matrix);
     }
-
-    /*
-    if (placeAfter && parseInt(placeAfter) !== 0) {
-        afterMC = parentMC.getChildById(parseInt(placeAfter));
-
-        if (afterMC.isMasked) {  //if masked add outside mask group
-            afterMC.el.parent().before(this.el);
-        } else {
-            afterMC.el.before(this.el);
-        }
-
-    } else {
-        parentEl.add(this.el);
-    }
-    */
 };
 
 MovieClip.prototype.addChild = function (child, placeAfter) {
@@ -181,7 +167,7 @@ MovieClip.prototype.getMatrix = function () {
   if (this.matrix) {
     return this.matrix;
   } else {
-    return new Snap.Matrix();
+    return new window.Snap.Matrix();
   }
 }
 
@@ -263,10 +249,8 @@ MovieClip.prototype._checkLoop = function () {
 MovieClip.prototype._loop = function () {
     var frame,
         commands,
-        children,
         i,
         found,
-        cmData,
         type;
 
     this.m_currentFrameNo = 0;
@@ -286,10 +270,10 @@ MovieClip.prototype._loop = function () {
     for (i = 0; i < this.children.length; i += 1) {
 
         found = false;
-        child = this.children[i];
+        const child = this.children[i];
 
-        for (c = 0; c < commands.length; ++c) {
-            cmdData = commands[c];
+        for (let c = 0; c < commands.length; ++c) {
+            const cmdData = commands[c];
             type = cmdData.cmdType;
 
             if (type == "Place") {
@@ -301,7 +285,7 @@ MovieClip.prototype._loop = function () {
         }
 
         if (found === false) {
-            command = new CMD.RemoveObjectCommand(child.id);
+            const command = new CMD.RemoveObjectCommand(child.id);
             this.commandList.push(command);
         }
     }
@@ -575,14 +559,14 @@ MovieClip.prototype._loopAround = function (seekMode, seekEnd) {
   this._loop();
   this.m_currentFrameNo = 0;
 
-  frame = this.getFrame(this.m_currentFrameNo);
+  const frame = this.getFrame(this.m_currentFrameNo);
 
   if (!frame) {
     return;
   }
 
   //Get the commands for the first frame
-  commands = frame.Command;
+  const commands = frame.Command;
   this._runCommands(commands);
 }
 
@@ -604,3 +588,5 @@ MovieClip.prototype.log = function () {
     //console.log.apply(console, args);
   }
 }
+
+export default MovieClip;

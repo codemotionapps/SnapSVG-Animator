@@ -30,11 +30,11 @@ var Shape = function (parentMC,resourceManager,charId,ObjectId,placeAfter,transf
         }
 
         transformArray = transform.split(",");
-        transformMat = new Snap.Matrix(transformArray[0],transformArray[1],transformArray[2],transformArray[3],transformArray[4],transformArray[5]);
+        transformMat = new window.Snap.Matrix(transformArray[0],transformArray[1],transformArray[2],transformArray[3],transformArray[4],transformArray[5]);
         instance.el.transform(transformMat);
 
         if (placeAfter && parseInt(placeAfter) !== 0) {
-            afterMC = parentMC.getChildById(parseInt(placeAfter));
+            const afterMC = parentMC.getChildById(parseInt(placeAfter));
 
             if (afterMC.isMasked) {  //if masked add outside mask group
                 afterMC.el.parent().before(instance.el);
@@ -47,25 +47,23 @@ var Shape = function (parentMC,resourceManager,charId,ObjectId,placeAfter,transf
     };
 
     this.addPath = function (j, k) {
-        var clr,
-            crlOpacity,
-            shape1,
+        var shape,
             path;
 
         shape = instance.el.path();
-        resourcePath = resourceManager.m_data.DOMDocument.Shape[j].path[k];
-        path = resourcePath.d;
+        this.resourcePath = resourceManager.m_data.DOMDocument.Shape[j].path[k];
+        path = this.resourcePath.d;
         shape.attr({fill: 'transparent'});
         shape.attr({d: path});
 
-        if(resourcePath.pathType == "Fill") {
-            this.addFill(shape, resourcePath);
-        } else if(resourcePath.pathType == "Stroke") {
-            this.addStroke(shape, resourcePath);
+        if(this.resourcePath.pathType == "Fill") {
+            this.addFill(shape, this.resourcePath);
+        } else if(this.resourcePath.pathType == "Stroke") {
+            this.addStroke(shape, this.resourcePath);
         }
     };
 
-    this.getFillColor = function (resoucePath) {
+    this.getFillColor = function () {
         var clr,
             r,
             g,
@@ -73,11 +71,11 @@ var Shape = function (parentMC,resourceManager,charId,ObjectId,placeAfter,transf
             a,
             colStr;
 
-        clr = resourcePath.color;
+        clr = this.resourcePath.color;
         r = parseInt(clr.substring(1, 3), 16);
         g = parseInt(clr.substring(3, 5), 16);
         b = parseInt(clr.substring(5, 7), 16);
-        a = resourcePath.colorOpacity;
+        a = this.resourcePath.colorOpacity;
         colStr = 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
 
         return colStr;
@@ -88,11 +86,12 @@ var Shape = function (parentMC,resourceManager,charId,ObjectId,placeAfter,transf
             patternArray,
             mat,
             src,
-            exists;
+            exists,
+            fillImage;
 
         patternArray = resourceImg.patternTransform.split(",");						
         p = 0;
-        mat = new Snap.Matrix(patternArray[p],patternArray[p+1],patternArray[p+1],patternArray[p+3],patternArray[p+4],patternArray[p+5]);
+        mat = new window.Snap.Matrix(patternArray[p],patternArray[p+1],patternArray[p+1],patternArray[p+3],patternArray[p+4],patternArray[p+5]);
         src = resourceImg.bitmapPath;
         
         exists = parentMC.el.paper.select('defs pattern image');
@@ -201,7 +200,7 @@ var Shape = function (parentMC,resourceManager,charId,ObjectId,placeAfter,transf
 
         if(resourcePath.color)
         {
-            clr = resourcePath.color;
+            const clr = resourcePath.color;
 
             r = parseInt(clr.substring(1, 3), 16);
             g = parseInt(clr.substring(3, 5), 16);
@@ -236,3 +235,5 @@ var Shape = function (parentMC,resourceManager,charId,ObjectId,placeAfter,transf
 
     this.create();
 };
+
+export default Shape;

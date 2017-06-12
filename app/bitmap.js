@@ -1,12 +1,9 @@
-	
-var Bitmap = function (parentMC,resourceManager,charId,ObjectId,placeAfter,transform) {
+var Bitmap = function (parentMC, resourceManager, charId, ObjectId, placeAfter, transform) {
     var instance = this,
         parentEl = parentMC.el;
 
     this.create = function () {
-        var j,
-            k,
-            transformArray,
+        var transformArray,
             transformMat;
 
         instance.el = parentMC.el.g();
@@ -30,11 +27,11 @@ var Bitmap = function (parentMC,resourceManager,charId,ObjectId,placeAfter,trans
         }
 
         transformArray = transform.split(",");
-        transformMat = new Snap.Matrix(transformArray[0],transformArray[1],transformArray[2],transformArray[3],transformArray[4],transformArray[5]);
+        transformMat = new window.Snap.Matrix(transformArray[0],transformArray[1],transformArray[2],transformArray[3],transformArray[4],transformArray[5]);
         instance.el.transform(transformMat);
 
         if (placeAfter && parseInt(placeAfter) !== 0) {
-            afterMC = parentMC.getChildById(parseInt(placeAfter));
+            const afterMC = parentMC.getChildById(parseInt(placeAfter));
 
             if (afterMC.isMasked) {  //if masked add outside mask group
                 afterMC.el.parent().before(instance.el);
@@ -49,3 +46,5 @@ var Bitmap = function (parentMC,resourceManager,charId,ObjectId,placeAfter,trans
 
     this.create();
 };
+
+export default Bitmap;

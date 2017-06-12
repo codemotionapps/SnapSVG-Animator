@@ -1,3 +1,5 @@
+import MovieClip from "./movieclip";
+import ResourceManager from "./resourceManager";
 
 /**
  * SVGAnim
@@ -6,18 +8,17 @@
  */
 function SVGAnim(data, w, h, fps, params) {
     var instance = this,
-        timeline,
         playing,
         autoplay,
         cbk,
         msg,
-        color = '#008460',
+        // color = '#008460',
         elementId;
 
     instance.version = '1.2.3';
 
     msg = 'Snap.svg Animator v' + instance.version;
-    console.log("%c" + msg, "color:" + color + ";font-weight:bold;");
+    // console.log("%c" + msg, "color:" + color + ";font-weight:bold;");
 
     params = params || {};
     fps = fps || 24;
@@ -50,8 +51,8 @@ function SVGAnim(data, w, h, fps, params) {
     instance.resourceManager = new ResourceManager(data);
 
     //TODO:: RENDERER
-    instance.s = elementId ? new Snap(elementId) : new Snap(w, h);
-    id = instance.s.id;
+    instance.s = elementId ? new window.Snap(elementId) : new window.Snap(w, h);
+    const id = instance.s.id;
     instance.s.attr('id', id);
     instance.s.attr('viewBox', "0 0 " + w + " " + h);
     instance.s.attr('preserveAspectRatio', 'xMidYMid meet');  //TODO::make this adjustable
@@ -65,7 +66,7 @@ function SVGAnim(data, w, h, fps, params) {
 
     create(instance.s);
 
-    function create(s) {
+    function create() {
         var maintimelineIndex,
             mainTimeline,
             i;
@@ -191,10 +192,6 @@ function SVGAnim(data, w, h, fps, params) {
         debug.innerHTML = str;
     }
 
-    function reset() {
-
-    }
-
     if (autoplay) {
         instance.play();
     } else {
@@ -202,3 +199,5 @@ function SVGAnim(data, w, h, fps, params) {
     }
 
 }
+
+export default SVGAnim;
