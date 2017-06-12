@@ -13,7 +13,8 @@ function SVGAnim(data, w, h, fps, params) {
         cbk,
         msg,
         // color = '#008460',
-        elementId;
+        elementId,
+        element;
 
     instance.version = '1.2.3';
 
@@ -25,6 +26,7 @@ function SVGAnim(data, w, h, fps, params) {
     w = w || 100;
     h = h || 100;
     elementId = params.elementId;
+    element = params.element;
 
     if (typeof(params.autoplay) !== 'undefined') {
         autoplay = params.autoplay;
@@ -51,7 +53,7 @@ function SVGAnim(data, w, h, fps, params) {
     instance.resourceManager = new ResourceManager(data);
 
     //TODO:: RENDERER
-    instance.s = elementId ? new window.Snap(elementId) : new window.Snap(w, h);
+    instance.s = element ? new window.Snap(element) : elementId ? new window.Snap(elementId) : new window.Snap(w, h);
     const id = instance.s.id;
     instance.s.attr('id', id);
     instance.s.attr('viewBox', "0 0 " + w + " " + h);
